@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+{% if user.is_authenticated and user.theme_preference != "system" %}
+<html lang="ru" data-theme="{{ user.theme_preference }}">
+{% else %}
+<html lang="ru">
+{% endif %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Мой сервер{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/server_icon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Мой сервер</h1>
+        {% if user.is_authenticated %}
+            <p>Привет, {{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></p>
+            <nav>
+                <a href="{% url 'profile' %}">Профиль</a>
+                <a href="{% url 'settings' %}">Настройки</a>
+                {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'create_account' %}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a>
+        {% endif %}
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

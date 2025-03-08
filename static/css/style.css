@@ -1,0 +1,134 @@
+/* 
+   Базовые переменные темы.
+   По умолчанию (light) 
+*/
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --header-bg: #4a4a4a;
+  --header-text: #fff;
+  --link-color: #0066cc;
+  --link-hover: #004999;
+  --nav-link-spacing: 1em;
+  --container-padding: 1.5em;
+}
+
+/* Тёмная тема */
+[data-theme="dark"] {
+  --bg-color: #1c1c1c;
+  --text-color: #f0f0f0;
+  --header-bg: #333;
+  --header-text: #fff;
+  --link-color: #66aaff;
+  --link-hover: #5590dd;
+}
+
+/* Если пользователь выбрал system, а система в тёмной теме */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1c1c1c;
+    --text-color: #f0f0f0;
+    --header-bg: #333;
+    --header-text: #fff;
+    --link-color: #66aaff;
+    --link-hover: #5590dd;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+header {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: var(--container-padding);
+}
+
+header h1 {
+  margin: 0;
+}
+
+nav {
+  margin-top: 0.5em;
+}
+
+nav a {
+  color: var(--header-text);
+  text-decoration: none;
+  margin-right: var(--nav-link-spacing);
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: var(--container-padding);
+}
+
+/* Ссылки в основном контенте */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+form {
+  max-width: 400px;
+  margin: 1em 0;
+}
+
+form label {
+  display: block;
+  margin: 0.5em 0 0.2em;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form select {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+}
+
+[data-theme="dark"] form input[type="text"],
+[data-theme="dark"] form input[type="email"],
+[data-theme="dark"] form input[type="password"],
+[data-theme="dark"] form select {
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  color: #f0f0f0;
+}
+
+button {
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--link-color);
+  color: #fff;
+  font-size: 1em;
+}
+
+button:hover {
+  background-color: var(--link-hover);
+}
