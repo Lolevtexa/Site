@@ -1,0 +1,14 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Редактировать пользователя{% endblock %}
+{% block content %}
+<h2>Редактировать пользователя</h2>
+<p>Пользователь: {{ user_to_edit.username }} (ID: {{ user_to_edit.id }})</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

@@ -21,6 +21,7 @@
                 <a href="{% url 'settings' %}">Настройки</a>
                 {% if user.is_staff or user.is_superuser %}
                     <a href="{% url 'create_account' %}">Создать аккаунт</a>
+                    <a href="{% url 'manage_accounts' %}">Управление аккаунтами</a>
                 {% endif %}
             </nav>
         {% else %}
