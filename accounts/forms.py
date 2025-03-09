@@ -4,6 +4,11 @@ from .models import CustomUser
 
 class CreateUserByEmailForm(forms.Form):
     email = forms.EmailField(label="Email", required=True)
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("Этот email уже используется.")
+        return email
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -16,6 +21,13 @@ class CustomUserCreationForm(UserCreationForm):
             'role': 'Роль',
             'theme_preference': 'Тема',
         }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = CustomUser.USER  # Назначаем обычного пользователя
+        if commit:
+            user.save()
+        return user
 
 class CustomUserChangeForm(UserChangeForm):
     """
