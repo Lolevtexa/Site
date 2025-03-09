@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.mail import send_mail
+from django.conf import settings
 from django.http import HttpResponseForbidden
-from .forms import (CustomUserCreationForm, CustomUserChangeForm, 
-                    SelfUserChangeForm, UserSettingsForm)
+from .forms import (CreateUserByEmailForm, SelfUserChangeForm, 
+                    CustomUserCreationForm, UserSettingsForm, 
+                    CustomUserChangeForm)
 from .models import CustomUser
+from .utils import generate_temp_username, generate_temp_password
 
 def index(request):
     return render(request, 'accounts/index.html')
@@ -28,7 +32,10 @@ def logout_view(request):
 
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html', {'user': request.user})
+    user = request.user
+    # Если must_change_credentials = True, выводим предупреждение
+    # (можно передать в шаблон флаг, можно просто в шаблоне проверить user.must_change_credentials)
+    return render(request, 'accounts/profile.html', {'user': user})
 
 @login_required
 def settings_view(request):
@@ -47,7 +54,15 @@ def edit_profile(request):
     if request.method == 'POST':
         form = SelfUserChangeForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+
+            # Если пользователь меняет имя пользователя (не temp_username) 
+            # или пароль (не temp_password), сбрасываем флаг:
+            # Т.к. пароль мы не можем сравнить напрямую, 
+            # проще считать, что если пользователь хотя бы раз изменил логин,
+            # можно снять флаг (или использовать другую логику).
+            user.must_change_credentials = False
+            user.save()
             return redirect('profile')
     else:
         form = SelfUserChangeForm(instance=request.user)
@@ -55,6 +70,53 @@ def edit_profile(request):
 
 def admin_check(user):
     return user.is_staff or user.is_superuser
+
+@login_required
+@user_passes_test(admin_check)
+def create_account_minimal(request):
+    if request.method == 'POST':
+        form = CreateUserByEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+
+            # Генерируем временные логин/пароль
+            temp_username = generate_temp_username()
+            while CustomUser.objects.filter(username=temp_username).exists():
+                temp_username = generate_temp_username()
+
+            temp_password = generate_temp_password()
+
+
+            # Создаём пользователя
+            new_user = CustomUser.objects.create_user(
+                username=temp_username,
+                email=email,
+                password=temp_password,
+            )
+            # Указываем, что нужно сменить имя/пароль
+            new_user.must_change_credentials = True
+            new_user.save()
+
+            # Отправляем письмо
+            subject = "Ваш новый аккаунт"
+            message = (
+                f"Здравствуйте!\n\n"
+                f"Для вас был создан аккаунт на сайте lolevtexa.ru.\n"
+                f"Временный логин: {temp_username}\n"
+                f"Временный пароль: {temp_password}\n\n"
+                f"Рекомендуем сменить имя пользователя и пароль при первом входе.\n"
+                f"С уважением,\nАдминистрация сайта"
+            )
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [email]
+
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+            return redirect('manage_accounts')  # или на любую нужную страницу
+    else:
+        form = CreateUserByEmailForm()
+
+    return render(request, 'accounts/create_account_minimal.html', {'form': form})
 
 @login_required
 @user_passes_test(admin_check)

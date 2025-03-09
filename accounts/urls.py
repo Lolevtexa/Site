@@ -23,4 +23,6 @@ urlpatterns = [
     path('password/done/', auth_views.PasswordChangeDoneView.as_view(
             template_name="accounts/password_change_done.html"
         ), name='password_change_done'),
+
+    path('create_account_minimal/', views.create_account_minimal, name='create_account_minimal'),
 ]

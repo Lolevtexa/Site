@@ -18,19 +18,25 @@
             <p>Привет, {{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></p>
             <nav>
                 <a href="{% url 'profile' %}">Профиль</a>
+                <a href="{% url 'edit_profile' %}">Редактировать профиль</a>
                 <a href="{% url 'settings' %}">Настройки</a>
                 {% if user.is_staff or user.is_superuser %}
-                    <a href="{% url 'create_account' %}">Создать аккаунт</a>
+                    <a href="{% url 'create_account_minimal' %}">Создать аккаунт (минимально)</a>
                     <a href="{% url 'manage_accounts' %}">Управление аккаунтами</a>
                 {% endif %}
+                <a href="{% url 'password_change' %}">Сменить пароль</a>
             </nav>
         {% else %}
             <a href="{% url 'login' %}">Войти</a>
         {% endif %}
     </header>
     <main>
-        {% block content %}
-        {% endblock %}
+        {% if user.is_authenticated and user.must_change_credentials %}
+        <div class="alert">
+            <strong>Внимание!</strong> Вы используете временные данные. Пожалуйста, смените имя пользователя и пароль.
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
     </main>
 </body>
 </html>

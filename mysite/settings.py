@@ -87,3 +87,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Указываем свою модель пользователя
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'  # или 'localhost', если используете собственный почтовый сервер
+EMAIL_PORT = 25  # или 25/465, в зависимости от конфигурации
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = 'noreply@lolevtexa.ru'
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = 'noreply@lolevtexa.ru'

@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class CustomUser(AbstractUser):
+    must_change_credentials = models.BooleanField(default=False)
     photo = models.ImageField(upload_to='user_photos/', blank=True, null=True)
 
     THEME_CHOICES = [
