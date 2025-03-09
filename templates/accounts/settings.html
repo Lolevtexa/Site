@@ -1,16 +1,14 @@
-{% extends "accounts/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}Настройки{% endblock %}
 {% block content %}
 <h2>Настройки пользователя</h2>
-
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Сохранить</button>
 </form>
-
 <hr>
 <p><a href="{% url 'edit_profile' %}">Изменить данные профиля</a></p>
 {% endblock %}

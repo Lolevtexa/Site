@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Мои запланированные письма</h2>
+<table>
+  <tr>
+    <th>Тема</th>
+    <th>Получатель</th>
+    <th>Время отправки</th>
+    <th>Статус</th>
+  </tr>
+  {% for schedule in schedules %}
+  <tr>
+    <td>{{ schedule.subject }}</td>
+    <td>{{ schedule.recipient }}</td>
+    <td>{{ schedule.scheduled_time }}</td>
+    <td>{{ schedule.status }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<a href="{% url 'schedule_email' %}">Запланировать новое письмо</a>
+<a href="{% url 'configure_email_client' %}">Настроить почтовый клиент</a>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Настройка почтового клиента</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Сохранить настройки</button>
+</form>
+<a href="{% url 'email_schedule_list' %}">Вернуться к письмам</a>
+{% endblock %}

@@ -11,7 +11,7 @@ from .models import CustomUser
 from .utils import generate_temp_username, generate_temp_password
 
 def index(request):
-    return render(request, 'accounts/index.html')
+    return render(request, 'index.html')
 
 def login_view(request):
     if request.method == 'POST':

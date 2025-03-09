@@ -1,8 +1,9 @@
-{% extends "accounts/base.html" %}
+{% extends "base.html" %}
+{% load static %}
 {% block title %}Создать аккаунт{% endblock %}
 {% block content %}
-<h2>Создать новый аккаунт</h2>
-<form method="post" enctype="multipart/form-data">
+<h2>Создать аккаунт (минимальная форма)</h2>
+<form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Создать</button>

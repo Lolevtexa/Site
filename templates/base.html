@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+{% if user.is_authenticated and user.theme_preference != "system" %}
+<html lang="ru" data-theme="{{ user.theme_preference }}">
+{% else %}
+<html lang="ru">
+{% endif %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Мой сервер{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/server_icon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <h1>Мой сервер</h1>
+            </div>
+            <div class="menu">
+                {% if user.is_authenticated %}
+                    <p class="welcome">
+                        Привет, {{ user.username }} |
+                        <a href="{% url 'logout' %}">Выйти</a>
+                    </p>
+                    <ul class="nav-links">
+                        <li><a href="{% url 'profile' %}">Профиль</a></li>
+                        <li><a href="{% url 'edit_profile' %}">Редактировать профиль</a></li>
+                        <li><a href="{% url 'settings' %}">Настройки</a></li>
+                        <li><a href="{% url 'email_schedule_list' %}">Расписание</a></li>
+                        {% if user.is_staff or user.is_superuser %}
+                            <li><a href="{% url 'create_account_minimal' %}">Создать аккаунт (минимально)</a></li>
+                            <li><a href="{% url 'manage_accounts' %}">Управление аккаунтами</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'password_change' %}">Сменить пароль</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="nav-links">
+                        <li><a href="{% url 'login' %}">Войти</a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <main>
+        {% if user.is_authenticated and user.must_change_credentials %}
+        <div class="alert">
+            <strong>Внимание!</strong> Вы используете временные данные. Пожалуйста, смените имя пользователя и пароль.
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
