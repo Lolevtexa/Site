@@ -43,32 +43,68 @@ body {
   color: var(--text-color);
 }
 
-header {
+/* ===============================
+   Двухсторонняя шапка (topbar)
+   =============================== */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Раздвигает меню влево и вправо */
   background-color: var(--header-bg);
   color: var(--header-text);
-  padding: var(--container-padding);
+  height: 50px;
+  padding: 0 var(--container-padding);
+  box-sizing: border-box;
 }
 
-header h1 {
+/* Левое меню */
+.nav-left ul,
+.nav-right ul {
+  display: flex;
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
-nav {
-  margin-top: 0.5em;
+/* Ссылки в левом меню */
+.nav-left li {
+  margin-right: var(--nav-link-spacing);
 }
-
-nav a {
+.nav-left a {
   color: var(--header-text);
   text-decoration: none;
-  margin-right: var(--nav-link-spacing);
-  font-weight: 500;
 }
 
-nav a:hover {
+/* Название/логотип по центру */
+.brand {
+  flex: 0; /* не растягивается */
+  text-align: center;
+  font-weight: bold;
+}
+.brand a {
+  color: var(--header-text);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* Правое меню */
+.nav-right li {
+  margin-left: var(--nav-link-spacing);
+}
+.nav-right a {
+  color: var(--header-text);
+  text-decoration: none;
+}
+
+/* Hover-эффект для ссылок в шапке */
+.nav-left a:hover,
+.nav-right a:hover,
+.brand a:hover {
   text-decoration: underline;
 }
 
-main {
+/* Основной блок содержимого */
+.content {
   padding: var(--container-padding);
 }
 
@@ -77,7 +113,6 @@ a {
   color: var(--link-color);
   text-decoration: none;
 }
-
 a:hover {
   color: var(--link-hover);
   text-decoration: underline;
@@ -87,16 +122,15 @@ h2 {
   margin-top: 0;
 }
 
+/* Формы */
 form {
   max-width: 400px;
   margin: 1em 0;
 }
-
 form label {
   display: block;
   margin: 0.5em 0 0.2em;
 }
-
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
@@ -109,7 +143,6 @@ form select {
   background-color: #fff;
   color: #333;
 }
-
 [data-theme="dark"] form input[type="text"],
 [data-theme="dark"] form input[type="email"],
 [data-theme="dark"] form input[type="password"],
@@ -128,41 +161,48 @@ button {
   color: #fff;
   font-size: 1em;
 }
-
 button:hover {
   background-color: var(--link-hover);
 }
 
+/* Таблицы */
 table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
 }
-
 table thead {
   background-color: var(--header-bg);
   color: var(--header-text);
 }
-
 table th,
 table td {
   padding: 0.6em;
   border: 1px solid #ccc;
 }
-
 table tr:nth-child(even) {
   background-color: #f5f5f5;
 }
-
 [data-theme="dark"] table tr:nth-child(even) {
   background-color: #2b2b2b;
 }
 
-a {
-  color: var(--link-color);
-  text-decoration: none;
+/* Пример оповещения (alert) */
+.alert {
+  padding: 0.75em 1em;
+  border-radius: 4px;
+  margin-bottom: 1rem;
 }
-a:hover {
-  color: var(--link-hover);
-  text-decoration: underline;
+.alert-warning {
+  background-color: #ffeb3b;
+  color: #333;
+}
+
+/* Подвал (footer) */
+.site-footer {
+  text-align: center;
+  margin-top: 2em;
+  padding: 1em 0;
+  border-top: 1px solid #ccc;
+  color: var(--text-color);
 }
