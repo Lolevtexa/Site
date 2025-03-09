@@ -1,72 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseForbidden
-from .forms import (CreateUserByEmailForm, SelfUserChangeForm, 
-                    CustomUserCreationForm, UserSettingsForm, 
-                    CustomUserChangeForm)
+from .forms import CreateUserByEmailForm, CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from .utils import generate_temp_username, generate_temp_password
-
-def index(request):
-    return render(request, 'index.html')
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('profile')
-        else:
-            return render(request, 'accounts/login.html', {'error': 'Неверное имя пользователя или пароль'})
-    return render(request, 'accounts/login.html')
-
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('login')
-
-@login_required
-def profile(request):
-    user = request.user
-    # Если must_change_credentials = True, выводим предупреждение
-    # (можно передать в шаблон флаг, можно просто в шаблоне проверить user.must_change_credentials)
-    return render(request, 'accounts/profile.html', {'user': user})
-
-@login_required
-def settings_view(request):
-    user = request.user
-    if request.method == 'POST':
-        form = UserSettingsForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('settings')
-    else:
-        form = UserSettingsForm(instance=user)
-    return render(request, 'accounts/settings.html', {'form': form})
-
-@login_required
-def edit_profile(request):
-    if request.method == 'POST':
-        form = SelfUserChangeForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            user = form.save(commit=False)
-
-            # Если пользователь меняет имя пользователя (не temp_username) 
-            # или пароль (не temp_password), сбрасываем флаг:
-            # Т.к. пароль мы не можем сравнить напрямую, 
-            # проще считать, что если пользователь хотя бы раз изменил логин,
-            # можно снять флаг (или использовать другую логику).
-            user.must_change_credentials = False
-            user.save()
-            return redirect('profile')
-    else:
-        form = SelfUserChangeForm(instance=request.user)
-    return render(request, 'accounts/edit_profile.html', {'form': form})
 
 def admin_check(user):
     return user.is_staff or user.is_superuser
@@ -116,7 +55,7 @@ def create_account_minimal(request):
     else:
         form = CreateUserByEmailForm()
 
-    return render(request, 'accounts/create_account_minimal.html', {'form': form})
+    return render(request, 'administration/create_account_minimal.html', {'form': form})
 
 @login_required
 @user_passes_test(admin_check)
@@ -132,18 +71,14 @@ def create_account(request):
             return redirect('index')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'accounts/create_account.html', {'form': form})
-
-def admin_check(user):
-    # Проверяем, что пользователь - администратор (is_staff или is_superuser)
-    return user.is_staff or user.is_superuser
+    return render(request, 'administration/create_account.html', {'form': form})
 
 @login_required
 @user_passes_test(admin_check)
 def manage_accounts(request):
     # Получаем список всех пользователей
     users = CustomUser.objects.all()
-    return render(request, 'accounts/manage_accounts.html', {'users': users})
+    return render(request, 'administration/manage_accounts.html', {'users': users})
 
 @login_required
 @user_passes_test(admin_check)
@@ -164,7 +99,7 @@ def edit_account(request, user_id):
             return redirect('manage_accounts')
     else:
         form = CustomUserChangeForm(instance=user_to_edit)
-    return render(request, 'accounts/edit_account.html', {'form': form, 'user_to_edit': user_to_edit})
+    return render(request, 'administration/edit_account.html', {'form': form, 'user_to_edit': user_to_edit})
 
 @login_required
 @user_passes_test(admin_check)

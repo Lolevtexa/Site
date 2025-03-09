@@ -21,7 +21,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'accounts',
+    'account',
+
+    'administration',
 
     'scheduler',
     'django_celery_beat',
@@ -91,7 +93,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Указываем свою модель пользователя
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'account.CustomUser'
 
 # ======================
 #  Email Settings (глобальные)
