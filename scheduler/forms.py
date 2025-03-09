@@ -4,8 +4,10 @@ from .models import EmailSchedule, EmailClientConfig
 class EmailScheduleForm(forms.ModelForm):
     class Meta:
         model = EmailSchedule
-        fields = ['subject', 'message', 'recipient', 'scheduled_time']
-
+        fields = ['subject', 'message', 'recipient', 'scheduled_time', 'recurrence']
+        widgets = {
+            'scheduled_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 class EmailClientConfigForm(forms.ModelForm):
     class Meta:
         model = EmailClientConfig

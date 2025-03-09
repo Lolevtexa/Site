@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Запланированные письма{% endblock %}
+
+{% block content %}
+<h2>Запланированные письма за {{ period }}</h2>
+<p>Период: {{ start_date|date:"d.m.Y" }} – {{ end_date|date:"d.m.Y" }}</p>
+
+{% if scheduled_emails %}
+<table>
+    <thead>
+        <tr>
+            <th>Тема</th>
+            <th>Получатель</th>
+            <th>Время отправки</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in scheduled_emails %}
+        <tr>
+            <td>{{ email.subject }}</td>
+            <td>{{ email.recipient }}</td>
+            <td>{{ email.scheduled_time|date:"d.m.Y H:i" }}</td>
+            <td>{{ email.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Нет запланированных писем за этот период.</p>
+{% endif %}
+
+<div class="navigation-links">
+    <a href="{% url 'email_schedule_week' %}">На неделю</a> |
+    <a href="{% url 'email_schedule_month' %}">На месяц</a> |
+    <a href="{% url 'email_schedule_list' %}">Общее расписание</a>
+</div>
+{% endblock %}

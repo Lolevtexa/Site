@@ -1,22 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мои запланированные письма{% endblock %}
+
 {% block content %}
 <h2>Мои запланированные письма</h2>
+<div class="navigation-links">
+    <a href="{% url 'email_schedule_week' %}">Показать на неделю</a> |
+    <a href="{% url 'email_schedule_month' %}">Показать на месяц</a>
+</div>
+{% if schedules %}
 <table>
-  <tr>
-    <th>Тема</th>
-    <th>Получатель</th>
-    <th>Время отправки</th>
-    <th>Статус</th>
-  </tr>
-  {% for schedule in schedules %}
-  <tr>
-    <td>{{ schedule.subject }}</td>
-    <td>{{ schedule.recipient }}</td>
-    <td>{{ schedule.scheduled_time }}</td>
-    <td>{{ schedule.status }}</td>
-  </tr>
-  {% endfor %}
+    <thead>
+        <tr>
+            <th>Тема</th>
+            <th>Получатель</th>
+            <th>Время отправки</th>
+            <th>Повторение</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in schedules %}
+        <tr>
+            <td>{{ email.subject }}</td>
+            <td>{{ email.recipient }}</td>
+            <td>{{ email.scheduled_time|date:"d.m.Y H:i" }}</td>
+            <td>{{ email.get_recurrence_display }}</td>
+            <td>{{ email.status }}</td>
+            <td>
+                <!-- Если расписание повторяющееся, предлагаем пропустить отдельное письмо -->
+                {% if email.recurrence != 'once' %}
+                    <a href="{% url 'email_schedule_skip_occurrence' email.pk %}?date={{ email.scheduled_time|date:"Y-m-d" }}">Пропустить</a>
+                    &nbsp;|&nbsp;
+                {% endif %}
+                <a href="{% url 'email_schedule_delete' email.pk %}" onclick="return confirm('Удалить это расписание?');">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
-<a href="{% url 'schedule_email' %}">Запланировать новое письмо</a>
-<a href="{% url 'configure_email_client' %}">Настроить почтовый клиент</a>
+{% else %}
+<p>Нет запланированных писем.</p>
+{% endif %}
 {% endblock %}
