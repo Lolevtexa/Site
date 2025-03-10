@@ -20,9 +20,9 @@
             <td>{{ user_obj.email }}</td>
             <td>{{ user_obj.role }}</td>
             <td>
-                <a href="{% url 'edit_account' user_obj.id %}">Редактировать</a>
+                <a href="{% url 'administration:edit_account' user_obj.id %}">Редактировать</a>
                 {% if user_obj != user %}
-                | <a href="{% url 'delete_account' user_obj.id %}" onclick="return confirm('Удалить пользователя {{ user_obj.username }}?');">Удалить</a>
+                | <a href="{% url 'administration:delete_account' user_obj.id %}" onclick="return confirm('Удалить пользователя {{ user_obj.username }}?');">Удалить</a>
                 {% endif %}
             </td>
         </tr>

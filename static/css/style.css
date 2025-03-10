@@ -1,208 +1,352 @@
-/* 
-   Базовые переменные темы.
-   По умолчанию (light) 
-*/
+/* ========================
+   Светлая тема (по умолчанию)
+   ======================== */
 :root {
-  --bg-color: #f9f9f9;
-  --text-color: #333;
-  --header-bg: #4a4a4a;
-  --header-text: #fff;
-  --link-color: #0066cc;
-  --link-hover: #004999;
-  --nav-link-spacing: 1em;
-  --container-padding: 1.5em;
+    --bg-color: #f9f9f9;
+    --text-color: #333;
+    --header-bg: #4a4a4a;
+    --header-text: #fff;
+    --link-color: #0066cc;
+    --link-hover: #004999;
+    --table-row-bg: #f5f5f5;
+    --table-border: #ccc;
+    --active-color: #ffaa00;
 }
 
-/* Тёмная тема */
+/* ========================
+   Тёмная тема (ручное переключение)
+   ======================== */
 [data-theme="dark"] {
-  --bg-color: #1c1c1c;
-  --text-color: #f0f0f0;
-  --header-bg: #333;
-  --header-text: #fff;
-  --link-color: #66aaff;
-  --link-hover: #5590dd;
-}
-
-/* Если пользователь выбрал system, а система в тёмной теме */
-@media (prefers-color-scheme: dark) {
-  :root {
     --bg-color: #1c1c1c;
     --text-color: #f0f0f0;
     --header-bg: #333;
     --header-text: #fff;
     --link-color: #66aaff;
     --link-hover: #5590dd;
-  }
+    --table-row-bg: #2b2b2b;
+    --table-border: #555;
+    --active-color: #ffaa00;
+}
+
+/* ========================
+   Авто-определение тёмной темы
+   ======================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1c1c1c;
+        --text-color: #f0f0f0;
+        --header-bg: #333;
+        --header-text: #fff;
+        --link-color: #66aaff;
+        --link-hover: #5590dd;
+        --table-row-bg: #2b2b2b;
+        --table-border: #555;
+        --active-color: #ffaa00;
+    }
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
-/* ===============================
-   Двухсторонняя шапка (topbar)
-   =============================== */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Раздвигает меню влево и вправо */
-  background-color: var(--header-bg);
+/* ===========================
+   Главная панель навигации (☰)
+   =========================== */
+.menu-toggle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: var(--header-bg);
   color: var(--header-text);
-  height: 50px;
-  padding: 0 var(--container-padding);
-  box-sizing: border-box;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
 }
 
-/* Левое меню */
-.nav-left ul,
-.nav-right ul {
+.main-nav {
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 220px;
+    background: var(--header-bg);
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-nav ul li {
+    padding: 10px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: var(--header-text);
+    display: block;
+}
+
+.main-nav ul li.active a {
+    font-weight: bold;
+    border-left: 4px solid var(--active-color);
+    padding-left: 6px;
+}
+
+/* =============================
+   Локальная навигация (адаптив)
+   ============================= */
+.sub-nav {
+    margin-left: 60px;
+    margin-right: 70px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    background: var(--bg-color);
+    white-space: nowrap;
+    overflow: visible;
+    flex-wrap: nowrap;
+}
+
+.sub-nav ul {
   display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin: auto;
+  padding: 0;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
-/* Ссылки в левом меню */
-.nav-left li {
-  margin-right: var(--nav-link-spacing);
+.sub-nav ul li {
+    padding: 10px;
 }
-.nav-left a {
+
+.sub-nav ul li a {
+  text-decoration: none;
   color: var(--header-text);
-  text-decoration: none;
 }
 
-/* Название/логотип по центру */
-.brand {
-  flex: 0; /* не растягивается */
-  text-align: center;
-  font-weight: bold;
-}
-.brand a {
-  color: var(--header-text);
-  text-decoration: none;
-  font-size: 1.2rem;
+.sub-nav ul li.active a {
+    font-weight: bold;
+    color: var(--active-color);
+    border-bottom: 2px solid var(--active-color);
 }
 
-/* Правое меню */
-.nav-right li {
-  margin-left: var(--nav-link-spacing);
-}
-.nav-right a {
-  color: var(--header-text);
-  text-decoration: none;
-}
-
-/* Hover-эффект для ссылок в шапке */
-.nav-left a:hover,
-.nav-right a:hover,
-.brand a:hover {
-  text-decoration: underline;
+/* ===========================
+   Кнопка "Ещё ▼"
+   =========================== */
+#more-menu {
+    display: none;
+    position: relative;
 }
 
-/* Основной блок содержимого */
-.content {
-  padding: var(--container-padding);
+/* Кнопка "Ещё ▼" */
+#more-menu button {
+    background: var(--header-bg);
+    color: var(--header-text);
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
 }
 
-/* Ссылки в основном контенте */
-a {
-  color: var(--link-color);
-  text-decoration: none;
-}
-a:hover {
-  color: var(--link-hover);
-  text-decoration: underline;
+/* Выпадающее меню */
+#more-dropdown {
+    display: none; /* по умолчанию скрыто */
+    position: absolute;
+    background: var(--header-bg);
+    color: var(--header-text);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    min-width: 180px;
+    border-radius: 5px;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    z-index: 1001;
 }
 
-h2 {
-  margin-top: 0;
+/* При добавлении класса "show" меню становится видимым */
+#more-dropdown.show {
+    display: block;
 }
 
-/* Формы */
+/* Пункты в выпадающем меню */
+#more-dropdown li {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+#more-dropdown li:hover {
+    background: var(--link-hover);
+}
+
+/* =========================
+   Формы и кнопки
+   ========================= */
 form {
-  max-width: 400px;
-  margin: 1em 0;
+    max-width: 400px;
+    margin: 1em 0;
 }
+
 form label {
-  display: block;
-  margin: 0.5em 0 0.2em;
+    display: block;
+    margin: 0.5em 0 0.2em;
 }
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
+
+form input,
 form select {
-  width: 100%;
-  padding: 0.5em;
-  margin-bottom: 0.8em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 0.8em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
 }
-[data-theme="dark"] form input[type="text"],
-[data-theme="dark"] form input[type="email"],
-[data-theme="dark"] form input[type="password"],
+
+[data-theme="dark"] form input,
 [data-theme="dark"] form select {
-  background-color: #2b2b2b;
-  border: 1px solid #555;
-  color: #f0f0f0;
+    background-color: #2b2b2b;
+    border: 1px solid #555;
+    color: #f0f0f0;
 }
 
 button {
-  padding: 0.6em 1.2em;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: var(--link-color);
-  color: #fff;
-  font-size: 1em;
-}
-button:hover {
-  background-color: var(--link-hover);
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--link-color);
+    color: #fff;
+    font-size: 1em;
 }
 
-/* Таблицы */
+button:hover {
+    background-color: var(--link-hover);
+}
+
+/* ========================
+   Стили таблиц (исправлено)
+   ======================== */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1em 0;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
 }
+
 table thead {
-  background-color: var(--header-bg);
-  color: var(--header-text);
+    background-color: var(--header-bg);
+    color: var(--header-text);
 }
+
 table th,
 table td {
-  padding: 0.6em;
-  border: 1px solid #ccc;
+    padding: 0.6em;
+    border: 1px solid var(--table-border);
+    color: var(--text-color);
 }
+
+/* Чётные строки */
 table tr:nth-child(even) {
-  background-color: #f5f5f5;
-}
-[data-theme="dark"] table tr:nth-child(even) {
-  background-color: #2b2b2b;
+    background-color: var(--table-row-bg);
 }
 
-/* Пример оповещения (alert) */
+/* =========================
+   Оповещения (alert)
+   ========================= */
 .alert {
-  padding: 0.75em 1em;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-.alert-warning {
-  background-color: #ffeb3b;
-  color: #333;
+    padding: 0.75em 1em;
+    border-radius: 4px;
+    margin-bottom: 1rem;
 }
 
-/* Подвал (footer) */
+.alert-warning {
+    background-color: #ffeb3b;
+    color: #333;
+}
+
+/* =========================
+   Контент и подвал (footer)
+   ========================= */
+main {
+    padding: 20px;
+}
+
 .site-footer {
-  text-align: center;
-  margin-top: 2em;
-  padding: 1em 0;
-  border-top: 1px solid #ccc;
-  color: var(--text-color);
+    text-align: center;
+    padding: 10px;
+    background: var(--header-bg);
+    color: var(--header-text);
+}
+
+/* ===========================
+   Меню пользователя (аватар)
+   =========================== */
+.user-menu {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.avatar-container {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    border: 2px solid var(--header-text);
+}
+
+/* Выпадающее меню профиля */
+.dropdown {
+    display: none;
+    position: absolute;
+    background: var(--header-bg);
+    color: var(--header-text);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    top: 45px;
+    right: 0;
+    min-width: 150px;
+    z-index: 9999;
+}
+
+.dropdown a {
+    display: block;
+    color: var(--header-text);
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.dropdown a:hover {
+    background: var(--link-hover);
+}
+
+/* Показывать dropdown при клике */
+.dropdown.show {
+    display: block;
+}
+
+/* ====== Основной контент ====== */
+.content {
+  padding: 20px;
 }

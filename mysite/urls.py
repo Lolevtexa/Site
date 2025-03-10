@@ -7,9 +7,9 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('account/', include('account.urls')),
-    path('administration/', include('administration.urls')),
-    path('scheduler/', include('scheduler.urls')),
+    path('account/', include('account.urls', namespace='account')),
+    path('administration/', include('administration.urls', namespace='administration')),
+    path('scheduler/', include('scheduler.urls', namespace='scheduler')),
 ]
 
 if settings.DEBUG:

@@ -26,7 +26,7 @@ def configure_email_client(request):
             email_config = form.save(commit=False)
             email_config.user = request.user
             email_config.save()
-            return redirect('configure_email_client')
+            return redirect('scheduler:configure_email_client')
     else:
         form = EmailClientConfigForm(instance=config)
     return render(request, 'scheduler/configure_email_client.html', {'form': form})
@@ -80,7 +80,7 @@ def schedule_email_view(request):
                     task='scheduler.tasks.send_scheduled_email',
                     args=json.dumps([schedule.pk]),
                 )
-            return redirect('email_schedule_list')
+            return redirect('scheduler:email_schedule_list')
     else:
         form = EmailScheduleForm()
     return render(request, 'scheduler/schedule_email.html', {'form': form})
@@ -142,7 +142,7 @@ def email_schedule_delete(request, pk):
         periodic_tasks.delete()
     schedule.delete()
     messages.success(request, "Запланированное письмо(а) удалено(ы).")
-    return redirect('email_schedule_list')
+    return redirect('scheduler:email_schedule_list')
 
 @login_required
 def email_schedule_skip_occurrence(request, pk):
@@ -161,4 +161,4 @@ def email_schedule_skip_occurrence(request, pk):
             messages.error(request, "Неверный формат даты.")
     else:
         messages.error(request, "Дата не указана.")
-    return redirect('email_schedule_list')
+    return redirect('scheduler:email_schedule_list')

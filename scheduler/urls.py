@@ -9,9 +9,11 @@ from .views import (
     email_schedule_skip_occurrence,
 )
 
+app_name = "scheduler"
+
 urlpatterns = [
+    path('', email_schedule_list, name='email_schedule_list'),
     path('schedule/', schedule_email_view, name='schedule_email'),
-    path('list/', email_schedule_list, name='email_schedule_list'),
     path('config/', configure_email_client, name='configure_email_client'),
     path('week/', email_schedule_week_view, name='email_schedule_week'),
     path('month/', email_schedule_month_view, name='email_schedule_month'),

@@ -32,8 +32,8 @@
 {% endif %}
 
 <div class="navigation-links">
-    <a href="{% url 'email_schedule_week' %}">На неделю</a> |
-    <a href="{% url 'email_schedule_month' %}">На месяц</a> |
-    <a href="{% url 'email_schedule_list' %}">Общее расписание</a>
+    <a href="{% url 'scheduler:email_schedule_week' %}">На неделю</a> |
+    <a href="{% url 'scheduler:email_schedule_month' %}">На месяц</a> |
+    <a href="{% url 'scheduler:email_schedule_list' %}">Общее расписание</a>
 </div>
 {% endblock %}

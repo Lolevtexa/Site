@@ -51,7 +51,7 @@ def create_account_minimal(request):
 
             send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
-            return redirect('manage_accounts')  # или на любую нужную страницу
+            return redirect('administration:manage_accounts')  # или на любую нужную страницу
     else:
         form = CreateUserByEmailForm()
 
@@ -68,7 +68,7 @@ def create_account(request):
             if new_user.role == 'admin':
                 new_user.is_staff = True
             new_user.save()
-            return redirect('index')
+            return redirect('administration:index')
     else:
         form = CustomUserCreationForm()
     return render(request, 'administration/create_account.html', {'form': form})
@@ -96,7 +96,7 @@ def edit_account(request, user_id):
                 # Если хотите, чтобы только admin-роль имела is_staff
                 updated_user.is_staff = False
             updated_user.save()
-            return redirect('manage_accounts')
+            return redirect('administration:manage_accounts')
     else:
         form = CustomUserChangeForm(instance=user_to_edit)
     return render(request, 'administration/edit_account.html', {'form': form, 'user_to_edit': user_to_edit})
@@ -110,4 +110,4 @@ def delete_account(request, user_id):
     if user_to_delete == request.user:
         return HttpResponseForbidden("Нельзя удалить самого себя.")
     user_to_delete.delete()
-    return redirect('manage_accounts')
+    return redirect('administration:manage_accounts')

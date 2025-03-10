@@ -10,7 +10,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('profile')
+            return redirect('account:profile')
         else:
             return render(request, 'account/login.html', {'error': 'Неверное имя пользователя или пароль'})
     return render(request, 'account/login.html')
@@ -18,7 +18,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('account:login')
 
 @login_required
 def profile(request):
@@ -34,7 +34,7 @@ def settings_view(request):
         form = UserSettingsForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('settings')
+            return redirect('account:settings')
     else:
         form = UserSettingsForm(instance=user)
     return render(request, 'account/settings.html', {'form': form})
@@ -53,7 +53,7 @@ def edit_profile(request):
             # можно снять флаг (или использовать другую логику).
             user.must_change_credentials = False
             user.save()
-            return redirect('profile')
+            return redirect('account:profile')
     else:
         form = SelfUserChangeForm(instance=request.user)
     return render(request, 'account/edit_profile.html', {'form': form})

@@ -6,8 +6,8 @@
 {% block content %}
 <h2>Мои запланированные письма</h2>
 <div class="navigation-links">
-    <a href="{% url 'email_schedule_week' %}">Показать на неделю</a> |
-    <a href="{% url 'email_schedule_month' %}">Показать на месяц</a>
+    <a href="{% url 'scheduler:email_schedule_week' %}">Показать на неделю</a> |
+    <a href="{% url 'scheduler:email_schedule_month' %}">Показать на месяц</a>
 </div>
 {% if schedules %}
 <table>

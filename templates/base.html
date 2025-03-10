@@ -1,63 +1,77 @@
-{% load static %}
 <!DOCTYPE html>
-{% if user.is_authenticated and user.theme_preference != "system" %}
-<html lang="ru" data-theme="{{ user.theme_preference }}">
-{% else %}
 <html lang="ru">
-{% endif %}
 <head>
-  <meta charset="UTF-8">
-  <title>{% block title %}.Lolevtexa{% endblock %}</title>
-  <link rel="icon" href="{% static 'images/server_icon.ico' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}.Lolevtexa{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/server_icon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script defer src="{% static 'js/nav.js' %}"></script>
 </head>
 <body>
-  <!-- Верхняя панель (topbar) -->
-  <header class="site-header">
-    <!-- Левое меню (локальное) -->
-    <nav class="nav-left">
-      <ul>
-        {% for link in local_menu %}
-          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+
+<!-- Кнопка для открытия/закрытия главного меню (бургер) -->
+<button class="menu-toggle" onclick="toggleMainNav()">☰</button>
+
+<!-- Главная панель навигации -->
+<nav id="main-nav" class="main-nav">
+    <ul>
+        {% for service in services_nav %}
+            <li class="{% if service.active %}active{% endif %}">
+                <a href="{{ service.url }}">{{ service.name }}</a>
+            </li>
         {% endfor %}
-      </ul>
-    </nav>
+    </ul>
+</nav>
 
-    <!-- Логотип/название по центру -->
-    <div class="brand">
-      <a href="{% url 'index' %}">.Lolevtexa</a>
+<!-- Локальная панель навигации -->
+{% if local_nav %}
+<nav class="sub-nav">
+    <ul id="local-nav">
+        {% for item in local_nav %}
+            <li class="{% if request.path == item.url %}active{% endif %}">
+                <a href="{{ item.url }}">{{ item.name }}</a>
+            </li>
+        {% endfor %}
+        <li id="more-menu">
+            <button onclick="toggleMoreMenu()">Ещё ▼</button>
+            <ul id="more-dropdown" class="hidden"></ul>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+<!-- Меню пользователя (аватар) -->
+<div class="user-menu">
+    {% if user.is_authenticated %}
+    <div class="avatar-container">
+        <img src="{{ user.photo.url }}" alt="Аватар" class="avatar" onclick="toggleDropdown()">
+        <div class="dropdown" id="userDropdown">
+            <a href="{% url 'account:profile' %}">Профиль</a>
+            <a href="{% url 'account:settings' %}">Настройки</a>
+            <a href="{% url 'account:logout' %}">Выход</a>
+        </div>
     </div>
+    {% else %}
+    <a href="{% url 'account:login' %}">Войти</a>
+    {% endif %}
+</div>
 
-    <!-- Правое меню (глобальные модули) -->
-    <nav class="nav-right">
-      <ul>
-        {% if user.is_authenticated %}
-          <li><a href="{% url 'profile' %}">Профиль</a></li>
-          <li><a href="{% url 'email_schedule_list' %}">Расписание</a></li>
-          {% if user.is_staff or user.is_superuser %}
-            <li><a href="{% url 'manage_accounts' %}">Управление</a></li>
-          {% endif %}
-          <li><a href="{% url 'logout' %}">Выйти</a></li>
-        {% else %}
-          <li><a href="{% url 'login' %}">Войти</a></li>
-        {% endif %}
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Основной контент -->
-  <main class="content">
+<!-- Основной контент -->
+<main class="content">
     {% if user.is_authenticated and user.must_change_credentials %}
-      <div class="alert alert-warning">
-        <strong>Внимание!</strong> Вы используете временные данные. Пожалуйста, смените имя пользователя и пароль.
-      </div>
+        <div class="alert alert-warning">
+            <strong>Внимание!</strong> Вы используете временные данные. Пожалуйста, смените имя пользователя и пароль.
+        </div>
     {% endif %}
     {% block content %}{% endblock %}
-  </main>
+</main>
 
-  <!-- Подвал (footer) при необходимости -->
-  <footer class="site-footer">
-    <p>© 2025 Lolevtexa</p>
-  </footer>
+<!-- Подвал -->
+<footer class="site-footer">
+    <p>&copy; 2024. Все права защищены.</p>
+</footer>
+
 </body>
 </html>
