@@ -18,6 +18,7 @@ document.addEventListener("click", function (event) {
     const menus = [
         { button: ".menu-toggle", menu: "#main-nav" },
         { button: ".avatar-container", menu: "#userDropdown" },
+        { button: "#more-button", menu: "#more-dropdown" },
     ];
 
     menus.forEach(({ button, menu }) => {
