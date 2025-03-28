@@ -1,0 +1,61 @@
+/* Контейнер с аватаром */
+.avatar-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Аватар */
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--header-text);
+}
+
+/* Выпадающее меню */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    min-width: 150px;
+    background: var(--header-bg);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 0;
+    z-index: 999;
+    font-size: 1em;
+    font-weight: normal;
+
+    opacity: 0;
+    transform: translateY(-5px);
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Активный пункт — жёлтая полоска справа */
+.dropdown a.active {
+    font-weight: bold;
+    position: relative;
+}
+
+.dropdown a.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--active-color);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

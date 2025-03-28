@@ -32,10 +32,12 @@
             <td>
                 <!-- Если расписание повторяющееся, предлагаем пропустить отдельное письмо -->
                 {% if email.recurrence != 'once' %}
-                    <a href="{% url 'email_schedule_skip_occurrence' email.pk %}?date={{ email.scheduled_time|date:"Y-m-d" }}">Пропустить</a>
-                    &nbsp;|&nbsp;
+                <a href="{% url 'scheduler:email_schedule_skip_occurrence' email.pk %}?date={{ email.scheduled_time|date:"
+                    Y-m-d" }}">Пропустить</a>
+                &nbsp;|&nbsp;
                 {% endif %}
-                <a href="{% url 'email_schedule_delete' email.pk %}" onclick="return confirm('Удалить это расписание?');">Удалить</a>
+                <a href="{% url 'scheduler:email_schedule_delete' email.pk %}"
+                    onclick="return confirm('Удалить это расписание?');">Удалить</a>
             </td>
         </tr>
         {% endfor %}

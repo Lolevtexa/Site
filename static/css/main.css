@@ -1,0 +1,34 @@
+/* =========================
+   Основной файл main.css
+   Подключает модульные CSS-стили
+   ========================= */
+
+/* CSS-переменные: цвета, шрифты и др. */
+@import url("theme.css");
+/* Темная/светлая тема и автоопределение */
+
+/* Базовые стили */
+@import url("base.css");
+/* Сброс, body, шрифт и общие стили */
+
+/* Структура и разметка */
+@import url("layout.css");
+/* Общий layout: header, main, content */
+
+/* Навигация */
+@import url("nav-common.css");
+@import url("nav-main.css");
+@import url("nav-sub.css");
+@import url("nav-user.css");
+
+/* Формы и кнопки */
+@import url("forms.css");
+/* Формы, инпуты, select, стили кнопок */
+
+/* Таблицы */
+@import url("tables.css");
+/* Стили таблиц: td, th, zebra-striping */
+
+/* Оповещения */
+@import url("alerts.css");
+/* Уведомления: alert, alert-warning и др. */

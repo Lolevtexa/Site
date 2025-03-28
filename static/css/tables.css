@@ -1,0 +1,21 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+table thead {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+}
+
+table th,
+table td {
+    padding: 0.6em;
+    border: 1px solid var(--table-border);
+    color: var(--text-color);
+}
+
+table tr:nth-child(even) {
+    background-color: var(--table-row-bg);
+}

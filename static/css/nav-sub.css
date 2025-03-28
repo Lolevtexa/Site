@@ -1,0 +1,93 @@
+.nav--sub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.nav--sub ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    white-space: nowrap;
+    align-items: center;
+    overflow: hidden;
+}
+
+.nav--sub li a {
+    border-top: 4px solid transparent;
+    padding-top: 6px;
+}
+
+.nav--sub li.active a {
+    font-weight: bold;
+    border-top: 4px solid var(--active-color);
+    padding-top: 6px;
+}
+
+#local-nav>li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.more-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.more-dropdown {
+    display: none;
+    position: fixed;
+    /* фиксированное позиционирование относительно окна */
+    width: 220px;
+    /* можно задать фиксированную ширину, аналогичную nav--main */
+    background: var(--header-bg);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 0;
+    z-index: 1000;
+
+    opacity: 0;
+    transform: translateY(-5px);
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.more-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.more-dropdown li {
+    white-space: nowrap;
+}
+
+.more-dropdown li a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: inherit;
+}
+.menu-button {
+    background: var(--header-bg);
+    color: var(--header-text);
+    border: none;
+    /* font-size: 24px; */
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.2s ease-in-out;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.menu-button:hover {
+    background: var(--link-hover);
+}

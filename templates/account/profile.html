@@ -5,8 +5,8 @@
 <p>Ник: {{ user.username }}</p>
 <p>Email: {{ user.email }}</p>
 {% if user.photo %}
-    <img src="{{ user.photo.url }}" alt="Фото профиля" width="200">
+<img src="{{ user.photo.url }}" alt="Фото профиля" width="200">
 {% else %}
-    <p>Фото не загружено.</p>
+<p>Фото не загружено.</p>
 {% endif %}
 {% endblock %}

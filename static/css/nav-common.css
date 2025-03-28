@@ -1,0 +1,45 @@
+/* Общая навигационная обёртка */
+.nav {
+    background: var(--header-bg);
+    margin: 0;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Общие стили ссылок в навигации */
+.nav li a,
+.dropdown a {
+    display: block;
+    color: var(--header-text);
+    text-decoration: none;
+    padding: 5px 10px;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.4;
+    transition: background 0.2s ease-in-out;
+}
+
+.nav li a:hover,
+.dropdown a:hover {
+    background: var(--link-hover);
+}
+
+/* Бургер */
+.menu-toggle {
+    background: var(--header-bg);
+    color: var(--header-text);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background 0.2s ease-in-out;
+}
+
+.menu-toggle:hover {
+    background: var(--link-hover);
+}

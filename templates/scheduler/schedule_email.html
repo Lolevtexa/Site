@@ -2,9 +2,9 @@
 {% block content %}
 <h2>Запланировать отправку письма</h2>
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Запланировать письмо</button>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Запланировать письмо</button>
 </form>
 <a href="{% url 'scheduler:email_schedule_list' %}">Мои письма</a>
 {% endblock %}

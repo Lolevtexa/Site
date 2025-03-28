@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+a {
+    color: var(--link-color);
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--link-hover);
+}

@@ -8,6 +8,7 @@ class EmailScheduleForm(forms.ModelForm):
         widgets = {
             'scheduled_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
 class EmailClientConfigForm(forms.ModelForm):
     class Meta:
         model = EmailClientConfig

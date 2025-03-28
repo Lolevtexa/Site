@@ -1,0 +1,54 @@
+.fixed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--header-bg);
+    padding: 10px 20px;
+    position: relative;
+    z-index: 1000;
+}
+.header-center {
+    flex: 1;
+    overflow: hidden;
+    /* предотвращает перенос элементов */
+}
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+main {
+    padding: 20px;
+}
+
+.content {
+    padding: 20px;
+    min-height: 100%;
+}
+
+.site-footer {
+    background: var(--header-bg);
+    color: var(--header-text);
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .nav--sub ul {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .menu-toggle {
+        font-size: 28px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+}

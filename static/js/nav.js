@@ -1,125 +1,122 @@
-/**
- * Открыть/закрыть главное меню (бургер).
- * Просто переключаем display: block / none.
- */
+function toggleVisibility(id) {
+    let element = document.getElementById(id);
+    if (element) {
+        element.classList.toggle("show");
+    }
+}
+
 function toggleMainNav() {
-  let mainNav = document.getElementById("main-nav");
-  if (mainNav.style.display === "block") {
-    mainNav.style.display = "none";
-  } else {
-    mainNav.style.display = "block";
-  }
+    let mainNav = document.getElementById("main-nav");
+    if (mainNav) mainNav.classList.toggle("show");
 }
 
-/**
- * Открыть/закрыть меню "Ещё".
- * Переключаем класс "show" у #more-dropdown.
- */
-function toggleMoreMenu() {
-  let moreDropdown = document.getElementById("more-dropdown");
-  moreDropdown.classList.toggle("show");
-}
-
-/**
- * Открыть/закрыть меню аватара.
- * Переключаем класс "show" у #userDropdown.
- */
 function toggleDropdown() {
-  let userDropdown = document.getElementById("userDropdown");
-  userDropdown.classList.toggle("show");
+    toggleVisibility("userDropdown");
 }
 
-/**
- * Функция для адаптивного скрытия пунктов локальной навигации,
- * которые не помещаются в одну строку. Они переносятся в "Ещё".
- */
-function adjustNavItems() {
-    let navContainer = document.querySelector(".sub-nav");
-    if (!navContainer) return;
+document.addEventListener("click", function (event) {
+    const menus = [
+        { button: ".menu-toggle", menu: "#main-nav" },
+        { button: ".avatar-container", menu: "#userDropdown" },
+    ];
 
-    let navItems = Array.from(document.querySelectorAll("#local-nav li:not(#more-menu)"));
-    let moreMenu = document.getElementById("more-menu");
-    let moreDropdown = document.getElementById("more-dropdown");
-    if (!moreMenu || !moreDropdown) return;
-
-    // Если справа есть фиксированный блок (аватар и т.п.), учтём его ширину:
-    let userMenu = document.querySelector(".user-menu");
-    let userWidth = userMenu ? userMenu.offsetWidth : 0;
-
-    // 1) Сброс: показываем все пункты, прячем кнопку «Ещё», очищаем её список
-    navItems.forEach(item => {
-        item.style.display = "inline-block";
-    });
-    moreMenu.style.display = "none";
-    moreDropdown.innerHTML = "";
-    moreDropdown.classList.remove("show");
-
-    // 2) Считаем, сколько места доступно без учёта «Ещё»
-    let availableWidth = navContainer.offsetWidth - userWidth - 20; 
-    let usedWidth = 0;
-    let hiddenItems = [];
-
-    // 3) Первый проход: скрываем пункты, которые не поместились
-    navItems.forEach(item => {
-        usedWidth += item.offsetWidth;
-        if (usedWidth > availableWidth) {
-            item.style.display = "none";
-            let link = item.querySelector("a");
-            if (link) {
-                hiddenItems.push(
-                    `<li onclick="window.location='${link.href}'">${link.innerText}</li>`
-                );
-            } else {
-                hiddenItems.push(`<li>${item.innerText}</li>`);
-            }
+    menus.forEach(({ button, menu }) => {
+        const buttonEl = document.querySelector(button);
+        const menuEl = document.querySelector(menu);
+        if (menuEl && !menuEl.contains(event.target) && !buttonEl.contains(event.target)) {
+            menuEl.classList.remove("show");
         }
     });
+});
 
-    // 4) Если вообще ничего не спрятали, «Ещё» не нужна — выходим
-    if (hiddenItems.length === 0) {
-        return;
+function toggleMoreDropdown() {
+    const moreButton = document.getElementById("more-button");
+    const moreDropdown = document.getElementById("more-dropdown");
+    if (moreDropdown.classList.contains("show")) {
+        moreDropdown.classList.remove("show");
+    } else {
+        // Позиционирование меню относительно кнопки "Ещё"
+        const rect = moreButton.getBoundingClientRect();
+        // Вычисляем позицию: верх = нижняя граница кнопки,
+        // левый отступ = правая граница кнопки минус ширина меню.
+        // Если ширина меню известна (220px), можно использовать её напрямую.
+        moreDropdown.style.top = rect.bottom + "px";
+        moreDropdown.style.left = (rect.right - 220) + "px";
+        moreDropdown.classList.add("show");
+    }
+}
+
+function adjustLocalNav() {
+    const nav = document.getElementById("local-nav");
+    const moreButton = document.getElementById("more-button");
+    const moreDropdown = document.getElementById("more-dropdown");
+
+    // 1. Возвращаем все пункты из подменю обратно
+    while (moreDropdown.firstChild) {
+        nav.insertBefore(moreDropdown.firstChild, moreButton);
     }
 
-    // 5) Иначе показываем «Ещё» и вставляем в него скрытые пункты
-    moreMenu.style.display = "inline-block";
-    // Но учтём, что теперь «Ещё» занимает место => делаем второй проход
+    // Сначала спрячем «Ещё», чтобы при первом проходе не мешала
+    moreButton.style.display = "none";
 
-    let moreMenuWidth = moreMenu.offsetWidth;
-    let newAvailableWidth = navContainer.offsetWidth - userWidth - 20 - moreMenuWidth;
+    const navWidth = nav.offsetWidth;
 
-    // Список, который скроем во второй фазе (уже при видимой кнопке «Ещё»)
-    let secondPassHidden = [];
-    usedWidth = 0;
+    // Все пункты (кроме «Ещё»)
+    const navItems = Array.from(nav.querySelectorAll("li:not(#more-button)"));
 
-    // 6) Второй проход: проверяем пункты, которые пока видны
-    navItems.forEach(item => {
-        if (item.style.display !== "none") {
-            usedWidth += item.offsetWidth;
-            if (usedWidth > newAvailableWidth) {
-                item.style.display = "none";
-                let link = item.querySelector("a");
-                if (link) {
-                    secondPassHidden.push(
-                        `<li onclick="window.location='${link.href}'">${link.innerText}</li>`
-                    );
-                } else {
-                    secondPassHidden.push(`<li>${item.innerText}</li>`);
-                }
-            }
+    // 2. Идём слева направо и проверяем, влезает ли каждый пункт
+    let usedWidth = 0;
+    let lastFittingIndex = -1;
+
+    // Можете заменить offsetWidth на getBoundingClientRect().width + margin
+    navItems.forEach((item, idx) => {
+        const w = item.offsetWidth;
+        if (usedWidth + w <= navWidth) {
+            usedWidth += w;
+            lastFittingIndex = idx;
         }
     });
 
-    // 7) Объединяем оба списка спрятанных пунктов и вставляем их в меню «Ещё»
-    hiddenItems = hiddenItems.concat(secondPassHidden);
-    moreDropdown.innerHTML = hiddenItems.join("");
+    // 3. Если lastFittingIndex < navItems.length - 1, значит не все пункты влезли
+    if (lastFittingIndex < navItems.length - 1) {
+        // Теперь показываем «Ещё», чтобы учесть её ширину
+        moreButton.style.display = "inline-flex";
+        const buttonWidth = moreButton.offsetWidth;
+
+        // Пересчитываем заново, учитывая ширину кнопки
+        usedWidth = 0;
+        lastFittingIndex = -1;
+        for (let i = 0; i < navItems.length; i++) {
+            const w = navItems[i].offsetWidth;
+            // Теперь сравниваем с (navWidth - buttonWidth)
+            if (usedWidth + w <= (navWidth - buttonWidth - 10)) {
+                usedWidth += w;
+                lastFittingIndex = i;
+            } else {
+                break;
+            }
+        }
+
+        // Всё, что не влезло (начиная со следующего индекса), уезжает в подменю
+        for (let i = lastFittingIndex + 1; i < navItems.length; i++) {
+            moreDropdown.appendChild(navItems[i]);
+        }
+    }
+    else {
+        // Все пункты поместились — «Ещё» не нужно
+        moreButton.style.display = "none";
+    }
 }
 
-function tmp() {
-    let moreDropdown = document.getElementById("more-dropdown");
-    moreDropdown.innerHTML = "";
-}
-
-// Запускаем при загрузке и при изменении размера окна
-window.addEventListener("load", adjustNavItems);
-window.addEventListener("resize", tmp);
-window.addEventListener("resize", adjustNavItems);
+// Запускаем функцию при загрузке страницы и при изменении размера окна
+document.addEventListener("DOMContentLoaded", adjustLocalNav);
+window.addEventListener("resize", adjustLocalNav);
+window.addEventListener("resize", function () {
+    const moreDropdown = document.getElementById("more-dropdown");
+    if (moreDropdown.classList.contains("show")) {
+        const moreButton = document.getElementById("more-button");
+        const rect = moreButton.getBoundingClientRect();
+        moreDropdown.style.top = rect.bottom + "px";
+        moreDropdown.style.left = (rect.right - 220) + "px";
+    }
+});

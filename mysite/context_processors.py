@@ -2,19 +2,41 @@ from django.urls import resolve, reverse
 from django.urls.exceptions import NoReverseMatch
 
 def generate_navigation(request):
+    # Шапка глобальной навигации (дополнена стартовой страницей)
+    # 'Стартовая страница' ведёт на '/', проверяем её активность через request.path
+    services = [
+        {
+            'name': 'Стартовая страница',
+            'url': '/',
+            'active': request.path == '/'
+        }
+    ]
+
+    # Остальные пункты глобального меню
     namespace_dict = {
         'account': 'Аккаунт',
-        'administration': 'Администрирование',
         'scheduler': 'Расписание',
     }
 
-    services = []
-    for ns, title in namespace_dict.items():
-        services.append({'name': title, 'url': f'/{ns}/', 'active': request.path.startswith(f'/{ns}/')})
+    if request.user.is_authenticated and request.user.is_staff:
+        namespace_dict['administration'] = 'Администрирование'
 
+
+    # Формируем пункты глобальной навигации (services_nav)
+    for ns, title in namespace_dict.items():
+        services.append({
+            'name': title,
+            'url': f'/{ns}/',
+            'active': request.path.startswith(f'/{ns}/')
+        })
+
+    # Уточняем, какой namespace у текущего URL (или None, если мы на корневом)
     current_ns = request.resolver_match.namespace if request.resolver_match else None
+
+    # Заранее готовим пустой список для локальной навигации
     local_nav = []
 
+    # Словарь, в котором для каждого неймспейса перечислены маршруты локального меню
     local_routes = {
         'account': [
             ('account:profile', 'Профиль'),
@@ -33,6 +55,7 @@ def generate_navigation(request):
         ],
     }
 
+    # Если namespace есть в local_routes, добавляем в локальную навигацию соответствующие ссылки
     if current_ns and current_ns in local_routes:
         for route, title in local_routes[current_ns]:
             try:
@@ -44,8 +67,12 @@ def generate_navigation(request):
                 })
             except NoReverseMatch:
                 pass
+    else:
+        # Если мы на стартовой странице (current_ns == None),
+        # то в локальную навигацию выводим все пункты из глобальной
+        local_nav = services
 
     return {
-        'services_nav': services,
-        'local_nav': local_nav,
+        'services_nav': services,  # Глобальное меню
+        'local_nav': local_nav,    # Локальное меню
     }
